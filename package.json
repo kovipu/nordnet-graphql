@@ -1,0 +1,27 @@
+{
+  "name": "nordnet-graphql",
+  "version": "1.0.0",
+  "description": "A GraphQL wrapper for Nordnet classic API",
+  "main": "index.ts",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "npm run build && node build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kovipu/nordnet-graphql.git"
+  },
+  "keywords": [
+    "GraphQL"
+  ],
+  "author": "Konsta Purtsi konsta@identio.fi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kovipu/nordnet-graphql/issues"
+  },
+  "homepage": "https://github.com/kovipu/nordnet-graphql#readme",
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
+}
