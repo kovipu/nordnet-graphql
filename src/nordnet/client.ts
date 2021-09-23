@@ -2,7 +2,7 @@ import fetch, { Headers, Response } from 'node-fetch';
 import { URLSearchParams } from 'url';
 
 import { username, password } from '../config';
-import { Account } from './types';
+import { Account, AccountInfo } from './types';
 
 const API_URL = 'https://www.nordnet.fi/';
 
@@ -12,6 +12,11 @@ let cookies: Record<string, string> = {};
 
 const getAccounts = async (): Promise<Array<Account>> => {
   const response = await _request('accounts');
+  return response.json();
+}
+
+const getAccountInfo = async (accid: number): Promise<Array<AccountInfo>> => {
+  const response = await _request(`accounts/${accid}/info`);
   return response.json();
 }
 
@@ -73,4 +78,4 @@ const joinCookies = (cookies: Record<string, string>) => {
   return Object.keys(cookies).map((key) => `${key}=${cookies[key]}`).join('; ');
 }
 
-export { getAccounts };
+export { getAccounts, getAccountInfo };
