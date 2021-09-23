@@ -41,7 +41,7 @@ export interface AccountInfo {
   full_marketvalue: Amount, // Total market value
   future_sum: Amount, // Not realized profit/loss for future
   interest: Amount, // Interest on the account
-  intraday_credit: Amount, // Intraday credit if available
+  intraday_credit?: Amount, // Intraday credit if available
   loan_limit: Amount, // Max loan limit (regardless of pawnvalue)
   own_capital: Amount, // account_sum + full_marketvalue + interest + forward_sum + future_sum + unrealized_future_profit_loss
   own_capital_morning: Amount, // Own capital calculated in the morning. Static during the day
