@@ -20,6 +20,21 @@ const getAccountInfo = async (accid: number): Promise<Array<AccountInfo>> => {
   return response.json();
 }
 
+// Todo: find a way to not have to duplicate typings...
+const getAccountLedgers = async (accid: number): Promise<Array<any>> => {
+  const response = await _request(`accounts/${accid}/ledgers`);
+  return response.json();
+}
+
+const getAccountPositions = async (accid: number): Promise<Array<any>> => {
+  const response = await _request(`accounts/${accid}/positions`);
+
+  // HTTP 204 No Content means the account has no positions.
+  if (response.status === 204) return [];
+
+  return response.json();
+}
+
 // Internal stuff.
 
 const _request = async (request: string): Promise<Response> => {
@@ -78,4 +93,4 @@ const joinCookies = (cookies: Record<string, string>) => {
   return Object.keys(cookies).map((key) => `${key}=${cookies[key]}`).join('; ');
 }
 
-export { getAccounts, getAccountInfo };
+export { getAccounts, getAccountInfo, getAccountLedgers, getAccountPositions };

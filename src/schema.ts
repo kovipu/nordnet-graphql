@@ -1,5 +1,5 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { getAccountInfo, getAccounts } from './nordnet/client';
+import { getAccountInfo, getAccountLedgers, getAccounts, getAccountPositions } from './nordnet/client';
 
 const typeDefs = `
   type Query {
@@ -17,6 +17,8 @@ const typeDefs = `
     shareville_alias: String
     type: String!
     info: [AccountInfo]
+    ledgers: LedgerInfo
+    positions: [Position]!
   }
 
   type AccountInfo {
@@ -43,6 +45,66 @@ const typeDefs = `
     unrealized_future_profit_loss: Amount!
   }
 
+  type LedgerInfo {
+    ledgers: [Ledger!]!
+    total: Amount!
+    total_acc_int_cred: Amount!
+    total_acc_int_deb: Amount!
+  }
+
+  type Ledger {
+    acc_int_cred: Amount!
+    acc_int_deb: Amount!
+    account_sum: Amount!
+    account_sum_acc: Amount!
+    currency: String!
+    exchange_rate: Amount!
+  }
+
+  type Position {
+    accid: ID
+    accno: Int!
+    acq_price: Amount!
+    acq_price_acc: Amount!
+    instrument: Instrument!
+    margin_percent: Int!
+    market_value: Amount!
+    market_value_acc: Amount!
+    pawn_percent: Int!
+    qty: Float!
+  }
+
+  type Instrument {
+    asset_class: String
+    brochure_url: String
+    currency: String!
+    dividend_policy: String
+    expiration_date: String
+    instrument_group_type: String
+    instrument_id: ID!
+    instrument_type: String!
+    isin_code: String
+    # key_information_documents: KeyInformationDocuments
+    leverage_percentage: Float
+    margin_percentage: Float
+    market_view: String
+    mifid2_category: Int
+    multiplier: Float
+    name: String
+    number_of_securities: Float
+    pawn_percentage: Float
+    price_type: String
+    prospectus_url: String
+    sector: String
+    sector_group: String
+    sfdr_article: Int
+    strike_price: Float
+    symbol: String!
+    total_fee: Float
+    # tradables: [Tradable]
+    # underlyings: [UnderlyingInfo]
+  }
+
   type Amount {
     currency: String!
     value: Float!
@@ -55,7 +117,9 @@ const resolvers = {
   },
 
   Account: {
-    info: (account: any) => getAccountInfo(account.accid)
+    info: (account: any) => getAccountInfo(account.accid),
+    ledgers: (account: any) => getAccountLedgers(account.accid),
+    positions: (account: any) => getAccountPositions(account.accid)
   }
 };
 
