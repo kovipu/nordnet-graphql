@@ -35,6 +35,14 @@ const getAccountPositions = async (accid: number): Promise<Array<any>> => {
   return response.json();
 }
 
+const getAccountReturns = async (accid: number): Promise<any> => {
+  const response = await _request(`accounts/${accid}/returns/historical`);
+  const returns = await response.json();
+
+  // Aggregated and non-aggregated were the same, so I decided to only return one for simplicity.
+  return returns.find((returns: any) => !returns.aggregated);
+}
+
 // Internal stuff.
 
 const _request = async (request: string): Promise<Response> => {
@@ -93,4 +101,4 @@ const joinCookies = (cookies: Record<string, string>) => {
   return Object.keys(cookies).map((key) => `${key}=${cookies[key]}`).join('; ');
 }
 
-export { getAccounts, getAccountInfo, getAccountLedgers, getAccountPositions };
+export { getAccounts, getAccountInfo, getAccountLedgers, getAccountPositions, getAccountReturns };

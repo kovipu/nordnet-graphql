@@ -1,5 +1,5 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { getAccountInfo, getAccountLedgers, getAccounts, getAccountPositions } from './nordnet/client';
+import { getAccountInfo, getAccountLedgers, getAccounts, getAccountPositions, getAccountReturns } from './nordnet/client';
 
 const typeDefs = `
   type Query {
@@ -19,6 +19,7 @@ const typeDefs = `
     info: [AccountInfo]
     ledgers: LedgerInfo
     positions: [Position]!
+    returns: Returns!
   }
 
   type AccountInfo {
@@ -105,6 +106,32 @@ const typeDefs = `
     # underlyings: [UnderlyingInfo]
   }
 
+  type Returns {
+    accid: ID
+    account_number: Int
+    aggregated: Boolean!
+    result_1_month: Amount
+    result_1_week: Amount
+    result_1_year: Amount
+    result_3_month: Amount
+    result_3_year: Amount
+    result_6_month: Amount
+    result_this_year: Amount
+    returns_1_month: Float
+    returns_1_week: Float
+    returns_1_year: Float
+    returns_3_month: Float
+    returns_3_year: Float
+    returns_6_month: Float
+    returns_this_year: Float
+    sharpe_ratio_1_month: Float
+    sharpe_ratio_1_year: Float
+    sharpe_ratio_3_year: Float
+    volatility_1_month: Float
+    volatility_1_year: Float
+    volatility_3_year: Float
+  }
+
   type Amount {
     currency: String!
     value: Float!
@@ -119,7 +146,8 @@ const resolvers = {
   Account: {
     info: (account: any) => getAccountInfo(account.accid),
     ledgers: (account: any) => getAccountLedgers(account.accid),
-    positions: (account: any) => getAccountPositions(account.accid)
+    positions: (account: any) => getAccountPositions(account.accid),
+    returns: (account: any) => getAccountReturns(account.accid)
   }
 };
 
