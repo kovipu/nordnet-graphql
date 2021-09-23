@@ -2,8 +2,5 @@
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "outDir": "./build",
-    "paths": {
-      "*": ["./src/@types/*"]
-    }
   }
 }

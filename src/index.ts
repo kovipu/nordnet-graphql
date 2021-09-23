@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 
-import Nordnet from 'nordnet-api';
+import * as nordnet from './nordnet/client';
 
 const app: Application = express();
 
@@ -10,20 +10,9 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello world');
 });
 
-// TODO: Require these from client.
-const { NORDNET_USERNAME, NORDNET_PASSWORD } = process.env;
-
-app.get('/login', async (req: Request, res: Response) => {
-  const nordnet = new Nordnet(NORDNET_USERNAME || '', NORDNET_PASSWORD || '');
-
-  try {
-    const instrument = await nordnet.instrument(17092094);
-    res.send(instrument);
-  } catch (err: any) {
-    console.log(err);
-    res.status(500)
-      .send(err.message);
-  }
+app.get('/accounts', async (req: Request, res: Response) => {
+  const accounts = await nordnet.getAccounts();
+  res.send(accounts);
 });
 
 app.listen(port, function () {
