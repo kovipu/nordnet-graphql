@@ -1,12 +1,11 @@
-import { FieldResolver, Query, Resolver, Root } from "type-graphql";
+import { FieldResolver, Query, Resolver, Root } from 'type-graphql';
 
-import { getAccountInfo, getAccountLedgers, getAccountPositions, getAccountReturns, getAccounts } from "./client";
-import { NordnetAccount } from "./schema";
+import { getAccountInfo, getAccountLedgers, getAccountPositions, getAccountReturns, getAccounts } from './client';
+import { NordnetAccount } from './schema';
 
 @Resolver(NordnetAccount)
 export class NordnetAccountResolver {
-
-  @Query(returns => [NordnetAccount], { description: "Returns a list of accounts that the user has access to." })
+  @Query(returns => [NordnetAccount], { description: 'Returns a list of accounts that the user has access to.' })
   nordnetAccounts() {
     return getAccounts();
   }

@@ -13,12 +13,12 @@ let cookies: Record<string, string> = {};
 const getAccounts = async (): Promise<Array<NordnetAccount>> => {
   const response = await _request('accounts');
   return response.json();
-}
+};
 
 const getAccountInfo = async (accid: number): Promise<Array<NordnetAccountInfo>> => {
   const response = await _request(`accounts/${accid}/info`);
   return response.json();
-}
+};
 
 // Todo: find a way to not have to duplicate typings...
 const getAccountLedgers = async (accid: number): Promise<Array<any>> => {
@@ -28,7 +28,7 @@ const getAccountLedgers = async (accid: number): Promise<Array<any>> => {
   if (response.status === 204) return [];
 
   return response.json();
-}
+};
 
 const getAccountPositions = async (accid: number): Promise<Array<any>> => {
   const response = await _request(`accounts/${accid}/positions`);
@@ -37,7 +37,7 @@ const getAccountPositions = async (accid: number): Promise<Array<any>> => {
   if (response.status === 204) return [];
 
   return response.json();
-}
+};
 
 const getAccountReturns = async (accid: number): Promise<any> => {
   const response = await _request(`accounts/${accid}/returns/historical`);
@@ -45,14 +45,14 @@ const getAccountReturns = async (accid: number): Promise<any> => {
 
   // Aggregated and non-aggregated were the same, so I decided to only return one for simplicity.
   return returns.find((returns: any) => !returns.aggregated);
-}
+};
 
 // Internal stuff.
 
 const _request = async (request: string): Promise<Response> => {
   const response = await fetch(`${API_URL}api/2/${request}`, {
     headers: {
-      cookie: joinCookies(cookies),
+      cookie: joinCookies(cookies)
     }
   });
 
@@ -62,11 +62,11 @@ const _request = async (request: string): Promise<Response> => {
   }
 
   return response;
-}
+};
 
 const _login = async () => {
   const loginResponse = await fetch(`${API_URL}api/2/login/anonymous`, {
-    method: 'POST',
+    method: 'POST'
   });
 
   cookies = parseCookies(loginResponse.headers);
@@ -86,23 +86,25 @@ const _login = async () => {
   const { NOW, xsrf } = parseCookies(authResponse.headers);
   cookies.NOW = NOW;
   cookies.xsrf = xsrf;
-}
+};
 
 // Helpers.
 
 const parseCookies = (headers: Headers) => {
   const rawCookies = headers.raw()['set-cookie'];
   const parsed: Record<string, string> = {};
-  rawCookies.forEach((cookie) => {
+  rawCookies.forEach(cookie => {
     const [key, value] = cookie.split(';')[0].split('=');
     parsed[key] = value;
   });
 
   return parsed;
-}
+};
 
 const joinCookies = (cookies: Record<string, string>) => {
-  return Object.keys(cookies).map((key) => `${key}=${cookies[key]}`).join('; ');
-}
+  return Object.keys(cookies)
+    .map(key => `${key}=${cookies[key]}`)
+    .join('; ');
+};
 
 export { getAccounts, getAccountInfo, getAccountLedgers, getAccountPositions, getAccountReturns };

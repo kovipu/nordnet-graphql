@@ -3,12 +3,12 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { graphqlHTTP } from 'express-graphql';
 
-const { NordnetAccountResolver } = require('./nordnet/resolver');
+import { NordnetAccountResolver } from './nordnet/resolver';
 
 const main = async () => {
   const schema = await buildSchema({
     resolvers: [NordnetAccountResolver]
-  })
+  });
 
   const port: number = 3001;
 
@@ -25,6 +25,6 @@ const main = async () => {
   app.listen(port, function () {
     console.log(`App is listening on port ${port}`);
   });
-}
+};
 
 main();
