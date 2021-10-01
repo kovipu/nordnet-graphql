@@ -2,7 +2,7 @@ import fetch, { Headers, Response } from 'node-fetch';
 import { URLSearchParams } from 'url';
 
 import { username, password } from '../config';
-import { Account, AccountInfo } from './types';
+import { NordnetAccount, NordnetAccountInfo } from './schema';
 
 const API_URL = 'https://www.nordnet.fi/';
 
@@ -10,12 +10,12 @@ let cookies: Record<string, string> = {};
 
 // Outward facing API functions.
 
-const getAccounts = async (): Promise<Array<Account>> => {
+const getAccounts = async (): Promise<Array<NordnetAccount>> => {
   const response = await _request('accounts');
   return response.json();
 }
 
-const getAccountInfo = async (accid: number): Promise<Array<AccountInfo>> => {
+const getAccountInfo = async (accid: number): Promise<Array<NordnetAccountInfo>> => {
   const response = await _request(`accounts/${accid}/info`);
   return response.json();
 }
@@ -23,6 +23,10 @@ const getAccountInfo = async (accid: number): Promise<Array<AccountInfo>> => {
 // Todo: find a way to not have to duplicate typings...
 const getAccountLedgers = async (accid: number): Promise<Array<any>> => {
   const response = await _request(`accounts/${accid}/ledgers`);
+
+  // HTTP 204 No Content means the account has no positions.
+  if (response.status === 204) return [];
+
   return response.json();
 }
 

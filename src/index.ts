@@ -1,20 +1,30 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application } from 'express';
+import 'reflect-metadata';
+import { buildSchema } from 'type-graphql';
 import { graphqlHTTP } from 'express-graphql';
 
-import { schema } from './schema';
+const { NordnetAccountResolver } = require('./nordnet/resolver');
 
-const port: number = 3001;
-
-const app: Application = express();
-
-app.use(
-  '/graphql',
-  graphqlHTTP({
-    schema,
-    graphiql: true
+const main = async () => {
+  const schema = await buildSchema({
+    resolvers: [NordnetAccountResolver]
   })
-);
 
-app.listen(port, function () {
-  console.log(`App is listening on port ${port}`);
-});
+  const port: number = 3001;
+
+  const app: Application = express();
+
+  app.use(
+    '/graphql',
+    graphqlHTTP({
+      schema,
+      graphiql: true
+    })
+  );
+
+  app.listen(port, function () {
+    console.log(`App is listening on port ${port}`);
+  });
+}
+
+main();
