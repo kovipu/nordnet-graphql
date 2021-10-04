@@ -2,7 +2,13 @@ import fetch, { Headers, Response } from 'node-fetch';
 import { URLSearchParams } from 'url';
 
 import { username, password } from '../config';
-import { NordnetAccount, NordnetAccountInfo } from './schema';
+import {
+  NordnetAccount,
+  NordnetAccountInfo,
+  NordnetAccountReturnsHistorical,
+  NordnetLedgerInfo,
+  NordnetPosition
+} from './schema';
 
 const API_URL = 'https://www.nordnet.fi/';
 
@@ -10,27 +16,27 @@ let cookies: Record<string, string> = {};
 
 // Outward facing API functions.
 
-const getAccounts = async (): Promise<Array<NordnetAccount>> => {
+const getAccounts = async (): Promise<NordnetAccount[]> => {
   const response = await _request('accounts');
   return response.json();
 };
 
-const getAccountInfo = async (accid: number): Promise<Array<NordnetAccountInfo>> => {
+const getAccountInfo = async (accid: number): Promise<NordnetAccountInfo[]> => {
   const response = await _request(`accounts/${accid}/info`);
   return response.json();
 };
 
 // Todo: find a way to not have to duplicate typings...
-const getAccountLedgers = async (accid: number): Promise<Array<any>> => {
+const getAccountLedgers = async (accid: number): Promise<NordnetLedgerInfo | null> => {
   const response = await _request(`accounts/${accid}/ledgers`);
 
   // HTTP 204 No Content means the account has no positions.
-  if (response.status === 204) return [];
+  if (response.status === 204) return null;
 
   return response.json();
 };
 
-const getAccountPositions = async (accid: number): Promise<Array<any>> => {
+const getAccountPositions = async (accid: number): Promise<NordnetPosition[]> => {
   const response = await _request(`accounts/${accid}/positions`);
 
   // HTTP 204 No Content means the account has no positions.
@@ -39,7 +45,7 @@ const getAccountPositions = async (accid: number): Promise<Array<any>> => {
   return response.json();
 };
 
-const getAccountReturns = async (accid: number): Promise<any> => {
+const getAccountReturns = async (accid: number): Promise<NordnetAccountReturnsHistorical | null> => {
   const response = await _request(`accounts/${accid}/returns/historical`);
   const returns = await response.json();
 

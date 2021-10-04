@@ -25,6 +25,7 @@
   "homepage": "https://github.com/kovipu/nordnet-graphql#readme",
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/node": "^16.9.2",
     "@types/node-fetch": "^2.5.12",
@@ -35,6 +36,7 @@
   },
   "dependencies": {
     "class-validator": "^0.13.1",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",

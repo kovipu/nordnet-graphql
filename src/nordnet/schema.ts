@@ -5,8 +5,8 @@ export class Amount {
   @Field({ description: 'The amount currency' })
   currency: string;
 
-  @Field(type => Float, { description: 'The amount' })
-  value: number;
+  @Field(type => Float, { nullable: true, description: 'The amount' })
+  value?: number;
 }
 
 @ObjectType()
